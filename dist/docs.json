@@ -1,0 +1,110 @@
+{
+  "api": {
+    "name": "TwitterPlugin",
+    "slug": "twitterplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "isLogged",
+        "signature": "() => Promise<TwitterLoggedResponse>",
+        "parameters": [],
+        "returns": "Promise<TwitterLoggedResponse>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "TwitterLoggedResponse"
+        ],
+        "slug": "islogged"
+      },
+      {
+        "name": "login",
+        "signature": "() => Promise<TwitterLoginResponse>",
+        "parameters": [],
+        "returns": "Promise<TwitterLoginResponse>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "TwitterLoginResponse"
+        ],
+        "slug": "login"
+      },
+      {
+        "name": "logout",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "logout"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "TwitterLoggedResponse",
+      "slug": "twitterloggedresponse",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "in",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        },
+        {
+          "name": "out",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "TwitterLoginResponse",
+      "slug": "twitterloginresponse",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "authToken",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "authTokenSecret",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "userName",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "userID",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}
