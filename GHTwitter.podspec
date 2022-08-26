@@ -7,9 +7,9 @@ Pod::Spec.new do |s|
 	s.version = '0.0.1'
 	s.summary = 'Enable TwitterKit features for Capacitor'
 	s.license = 'MIT'
-	s.homepage = 'https://github.com/GerritHoskins/twitter'
+	s.homepage = 'https://github.com/GerritHoskins/gh-twitter'
 	s.author = 'Stewan Silva'
-	s.source = { :git => 'https://github.com/GerritHoskins/twitter.git', :tag => package['name'] + '@' + package['version'] }
+	s.source = { :git => 'https://github.com/GerritHoskins/gh-twitter.git', :tag => package['name'] + '@' + package['version'] }
 	s.source_files = 'ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}', 'preferences/ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}'
 	s.ios.deployment_target  = '13.0'
 	s.dependency 'Capacitor'
