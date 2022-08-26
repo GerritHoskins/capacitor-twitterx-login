@@ -1,5 +1,4 @@
 package com.getcapacitor.community.twitter;
-import static com.twitter.sdk.android.core.TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE;
 
 import android.content.Intent;
 import android.util.Log;
@@ -12,57 +11,61 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.SessionManager;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterAuthToken;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
-@CapacitorPlugin(name = "Twitter", requestCodes = { DEFAULT_AUTH_REQUEST_CODE })
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@CapacitorPlugin(name = "Twitter", requestCodes = { TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE })
 public class TwitterPlugin extends Plugin {
-    private TwitterAuthClient authClient;
+
+    public static final String LOG_TAG = "bitburst.twitter ";
+
     private TwitterInstance twitterInstance = null;
 
     @Override()
     public void load() {
-        twitterInstance = new TwitterInstance(getContext(), getActivity());
-        authClient = twitterInstance.authClient;
+        twitterInstance = new TwitterInstance(getContext(), getActivity(), getConfig());
         super.load();
     }
 
     @PluginMethod()
     public void login(final PluginCall call) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            try {
+                getInstance().authClient.authorize(getActivity(), new Callback<TwitterSession>() {
+                    @Override
+                    public void success(Result<TwitterSession> result) {
+                        JSObject ret = new JSObject();
+                        ret.put("authToken", result.data.getAuthToken().token);
+                        ret.put("authTokenSecret", result.data.getAuthToken().secret);
+                        ret.put("userName", result.data.getUserName());
+                        ret.put("userID", result.data.getUserId());
+                        call.resolve(ret);
+                    }
 
-        if(twitterInstance == null) {
-            twitterInstance = new TwitterInstance(getContext(), getActivity());
-        }
-
-        twitterInstance.authClient.authorize(getActivity(), new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> result) {
-                JSObject ret = new JSObject();
-                ret.put("authToken", result.data.getAuthToken().token);
-                ret.put("authTokenSecret", result.data.getAuthToken().secret);
-                ret.put("userName", result.data.getUserName());
-                ret.put("userID", result.data.getUserId());
-                call.resolve(ret);
-            }
-
-            @Override
-            public void failure(TwitterException exception) {
-                Log.d("DEBUG", "OH NO!! THERE WAS AN ERROR");
-                call.reject("error", exception);
+                    @Override
+                    public void failure(TwitterException exception) {
+                        Log.d(LOG_TAG, exception.getLocalizedMessage());
+                        call.reject(LOG_TAG + "login error", exception);
+                    }
+                });
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                call.reject(LOG_TAG + "error retrieving access token", exception);
             }
         });
     }
 
     @PluginMethod()
     public void logout(PluginCall call) {
-        if(twitterInstance == null) {
-            twitterInstance = new TwitterInstance(getContext(), getActivity());
-        }
-        twitterInstance.authClient.cancelAuthorize();
-        SessionManager sessionManager = TwitterCore.getInstance().getSessionManager();
+        getInstance().authClient.cancelAuthorize();
+        SessionManager<TwitterSession> sessionManager = TwitterCore.getInstance().getSessionManager();
         sessionManager.clearActiveSession();
         call.resolve();
     }
@@ -90,15 +93,18 @@ public class TwitterPlugin extends Plugin {
 
     @Override
     protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(twitterInstance == null) {
-            twitterInstance = new TwitterInstance(getContext(), getActivity());
-        }
-
-        if (requestCode == 140) {
-            twitterInstance.authClient.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE) {
+            getInstance().authClient.onActivityResult(TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE, resultCode, data);
         } else {
-            super.handleOnActivityResult(requestCode, resultCode, data);
+            super.handleOnActivityResult(TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE, resultCode, data);
         }
+    }
+
+    private TwitterInstance getInstance() {
+        if(twitterInstance == null) {
+            twitterInstance = new TwitterInstance(getContext(), getActivity(), getConfig());
+        }
+
+        return twitterInstance;
     }
 }
