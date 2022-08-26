@@ -1,5 +1,5 @@
 {
-  "name": "gh-twitter",
+  "name": "@gerrithoskins/gh-twitter",
   "version": "0.0.1",
   "description": "Capacitor plugin for Twitterkit5",
   "main": "dist/plugin.cjs.js",
