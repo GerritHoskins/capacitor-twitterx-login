@@ -8,8 +8,8 @@ import TwitterCore
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
  */
-@objc(TwitterPlugin)
-public class TwitterPlugin: CAPPlugin
+@objc(TwitterXPlugin)
+public class TwitterXPlugin: CAPPlugin
 {
     var window: UIWindow?
     

@@ -7,11 +7,13 @@ target 'Plugin' do
 
   # Pods
   pod 'TwitterKit'
+  pod 'AppAuth'
   pod 'Capacitor'
 end
 
 target 'PluginTests' do
   use_frameworks!
   pod 'TwitterKit'
+  pod 'AppAuth'
   pod 'Capacitor'
 end

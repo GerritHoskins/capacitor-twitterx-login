@@ -12,7 +12,7 @@ import com.twitter.sdk.android.core.TwitterConfig;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import  com.twitter.sdk.android.core.Twitter;
 
-public class TwitterInstance extends Application {
+public class TwitterXInstance extends Application {
 
     public TwitterAuthClient authClient;
     public TwitterConfig config;
@@ -22,7 +22,7 @@ public class TwitterInstance extends Application {
     public Activity activity;
     public Context context;
 
-    TwitterInstance(Context context, Activity activity, PluginConfig pluginConfig) {
+    TwitterXInstance(Context context, Activity activity, PluginConfig pluginConfig) {
         this.consumerKey = pluginConfig.getString("consumerKey");
         this.consumerSecret = pluginConfig.getString("consumerSecret");
         this.context = context;

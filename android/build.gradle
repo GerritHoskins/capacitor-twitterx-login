@@ -51,4 +51,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.twitter.sdk.android:twitter-core:3.3.0'
+    implementation 'net.openid:appauth:0.7.1'
 }
