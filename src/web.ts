@@ -1,11 +1,11 @@
 import { WebPlugin } from '@capacitor/core';
 import {
-  TwitterPlugin,
-  TwitterLoginResponse,
-  TwitterLoggedResponse,
+  TwitterXPlugin,
+  TwitterXLoginResponse,
+  TwitterXLoggedResponse,
 } from './definitions';
 
-export class TwitterWeb extends WebPlugin implements TwitterPlugin {
+export class TwitterXWeb extends WebPlugin implements TwitterXPlugin {
   constructor() {
     super({
       name: 'Twitter',
@@ -13,13 +13,15 @@ export class TwitterWeb extends WebPlugin implements TwitterPlugin {
     });
   }
 
-  isLogged(): Promise<TwitterLoggedResponse> {
-    throw this.unimplemented('Not implemented on web.');
+  isLogged(): Promise<TwitterXLoggedResponse> {
+   return Promise.reject('Not implemented on web.');
   }
-  login(): Promise<TwitterLoginResponse> {
-    throw this.unimplemented('Not implemented on web.');
+
+  login(): Promise<TwitterXLoginResponse> {
+    return Promise.reject('Not implemented on web.');
   }
+
   logout(): Promise<void> {
-    throw this.unimplemented('Not implemented on web.');
+    return Promise.reject('Not implemented on web.');
   }
 }
