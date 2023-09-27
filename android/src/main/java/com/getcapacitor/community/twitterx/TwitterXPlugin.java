@@ -100,7 +100,7 @@ public class TwitterXPlugin extends Plugin {
                                call.resolve();
                            } else {
                               call.reject(LOG_TAG + "Unexpected exception on handling intent result.")
-                           }
+                           
                        }
                    }
                );
