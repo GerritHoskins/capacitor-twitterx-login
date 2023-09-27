@@ -8,32 +8,24 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.SessionManager;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterAuthToken;
-import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
+import net.openid.appauth.AuthorizationRequest;
+import net.openid.appauth.AuthorizationResponse;
+import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationServiceConfiguration;
+import net.openid.appauth.TokenResponse;
+import net.openid.appauth.AuthState;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@CapacitorPlugin(name = "TwitterX", requestCodes = { TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE })
+@CapacitorPlugin(name = "TwitterX")
 public class TwitterXPlugin extends Plugin {
 
     public static final String LOG_TAG = "twitterX ";
 
-    private TwitterXInstance twitterInstance = null;
+    private AuthState authState;
 
-    @Override()
-    public void load() {
-        twitterInstance = new TwitterInstance(getContext(), getActivity(), getConfig());
-        super.load();
-    }
-
-    @PluginMethod()
+    @PluginMethod
     public void login(final PluginCall call) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
@@ -45,7 +37,7 @@ public class TwitterXPlugin extends Plugin {
 
                 AuthorizationRequest request = new AuthorizationRequest.Builder(
                     config,
-                    getConfig().getString("consumerKey"),
+                    getConfig().getString("clientId"),
                     ResponseTypeValues.CODE,
                     new Uri(getConfig().getString("redirectUri"))
                 )
@@ -62,12 +54,26 @@ public class TwitterXPlugin extends Plugin {
         });
     }
 
-    @PluginMethod()
-    public void logout(PluginCall call) {
-        getInstance().authClient.cancelAuthorize();
-        SessionManager<TwitterSession> sessionManager = TwitterCore.getInstance().getSessionManager();
-        sessionManager.clearActiveSession();
-        call.resolve();
+    @PluginMethod
+    public void logout(final PluginCall call) {
+        String idToken = authState.getIdToken();
+        Uri issuer = authState.getAuthorizationServiceConfiguration().discoveryDoc.getIssuer();
+        
+        if (idToken == null || issuer == null) {
+            call.reject("Error forming logout URL or no idToken available");
+            return;
+        }
+
+        String logoutUrl = issuer.toString() + "/v1/logout?id_token_hint=" + idToken;
+
+        authState = null;
+
+        // TODO: clear sensitive information in SharedPreferences
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoutUrl));
+        startActivity(browserIntent);
+        
+        call.resolve(new JSObject());
     }
 
     @ActivityCallback

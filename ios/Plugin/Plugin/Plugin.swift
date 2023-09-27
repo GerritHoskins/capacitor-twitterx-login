@@ -1,64 +1,76 @@
 import Foundation
 import Capacitor
-import TwitterCore
+import AppAuth
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitor.ionicframework.com/docs/plugins/ios
- */
 @objc(TwitterXPlugin)
 public class TwitterXPlugin: CAPPlugin
 {
     var window: UIWindow?
-    
-    public override func load() {
-        let consumerKey = getConfigValue("consumerKey") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON"
-        let consumerSecret = getConfigValue("consumerSecret") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON"
-        
-        TWTRTwitter.sharedInstance().start(withConsumerKey: consumerKey, consumerSecret: consumerSecret)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didTwitterRespond(notification:)), name: Notification.Name(CAPNotifications.URLOpen.name()), object: nil)
-    }
-    
- 
-    @objc func didTwitterRespond(notification: NSNotification) {
-        let app = UIApplication.shared
-        
-        guard let object = notification.object as? [String:Any?] else {
-            return
-        }
+    var currentAuthorizationFlow: OIDExternalUserAgentSession?
+    var authState: OIDAuthState?
 
-        TWTRTwitter.sharedInstance().application(app, open: object["url"] as! URL, options: object["options"] as! [AnyHashable : Any])
-    }
-    
     @objc func login(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            TWTRTwitter.sharedInstance().logIn(completion: { (session, error) in
-                if session != nil { // Log in succeeded
-                    TWTRTwitter.sharedInstance().sessionStore.saveSession(withAuthToken: session!.authToken, authTokenSecret: session!.authTokenSecret) { session, error in
-                    }
-                    call.resolve([
-                        "authToken": session?.authToken as Any,
-                        "authTokenSecret": session?.authTokenSecret as Any,
-                        "userName":session?.userName as Any,
-                        "userID": session?.userID as Any
-                        ])
-                } else {
-                    print("logIn ERROR: \(String(describing: error))")
-                    call.reject("error");
-                }
-            })
+             guard let configuration = OIDServiceConfiguration(
+            authorizationEndpoint: URL(string: "https://api.twitter.com/oauth/authorize")!,
+            tokenEndpoint: URL(string: "https://api.twitter.com/oauth/token")!
+        ) else {
+            // Handle error.            
+            return
         }
+        
+        guard let clientId = getConfigValue("clientId") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON",
+              let redirectUri = getConfigValue("redirectUri") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON",
+              let scope = getConfigValue("scope") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON",
+        else {
+            // Handle missing configuration values error
+            return
+        }
+        
+        let request = OIDAuthorizationRequest(
+            configuration: configuration,
+            clientId: clientId,
+            clientSecret: nil,
+            scopes: [scope],
+            redirectURL: redirectUri,
+            responseType: OIDResponseTypeCode,
+            additionalParameters: nil
+        )
+        
+        currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self) { authState, error in
+            if let authState = authState {
+                // Authorization successful, get the token
+                let accessToken = authState.lastTokenResponse?.accessToken
+                // Handle the access token and other required information
+            } else {
+                // Authorization failed, handle the error
+            }
+        }
+       }
     }
     
     @objc func logout(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
-            let store = TWTRTwitter.sharedInstance().sessionStore
-            
-            if let userId = store.session()?.userID {
-                store.logOutUserID(userId)
-                call.resolve();
-            }
+            guard let idToken = authState?.lastTokenResponse?.idToken,
+              let issuer = authState?.lastAuthorizationResponse.request.configuration.issuer,
+              let logoutURL = URL(string: "\(issuer)/v1/logout?id_token_hint=\(idToken)") else {
+            call.reject("Error forming logout URL or no idToken available")
+            return
         }
+        
+        // Clearing the AuthState.
+        authState = nil
+        
+        // Optionally, if you are storing tokens or any sensitive information in UserDefaults,
+        // clear them here as well.
+        
+        UIApplication.shared.open(logoutURL)
+        call.resolve()
+        }
+    }
+
+    private func getConfigString(forKey key: String) -> String? {
+     // Replace with actual implementation to retrieve the configuration values.
+     return nil
     }
 }

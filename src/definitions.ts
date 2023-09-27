@@ -19,6 +19,7 @@ export interface TwitterXLoginResponse {
 }
 
 export interface TwitterXPluginOptions {
-  consumerKey?: string;
-  consumerSecret?: string;
+  clientId?: string;
+  redirectUri?: string;
+  scope?: string | string[];
 }
