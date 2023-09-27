@@ -1,7 +1,5 @@
 import Foundation
 import Capacitor
-
-import TwitterKit
 import TwitterCore
 
 /**
@@ -33,24 +31,13 @@ public class TwitterXPlugin: CAPPlugin
         TWTRTwitter.sharedInstance().application(app, open: object["url"] as! URL, options: object["options"] as! [AnyHashable : Any])
     }
     
-    
-    @objc func isLogged(_ call: CAPPluginCall) {
-        DispatchQueue.main.async {
-            if (TWTRTwitter.sharedInstance().sessionStore.hasLoggedInUsers()) {
-                call.success(["in": true, "out": false])
-            } else {
-                call.success(["in": false, "out": true])
-            }
-        }
-    }
-    
     @objc func login(_ call: CAPPluginCall) {
         DispatchQueue.main.async {
             TWTRTwitter.sharedInstance().logIn(completion: { (session, error) in
                 if session != nil { // Log in succeeded
                     TWTRTwitter.sharedInstance().sessionStore.saveSession(withAuthToken: session!.authToken, authTokenSecret: session!.authTokenSecret) { session, error in
                     }
-                    call.success([
+                    call.resolve([
                         "authToken": session?.authToken as Any,
                         "authTokenSecret": session?.authTokenSecret as Any,
                         "userName":session?.userName as Any,
@@ -58,7 +45,7 @@ public class TwitterXPlugin: CAPPlugin
                         ])
                 } else {
                     print("logIn ERROR: \(String(describing: error))")
-                    call.error("error");
+                    call.reject("error");
                 }
             })
         }
@@ -70,7 +57,7 @@ public class TwitterXPlugin: CAPPlugin
             
             if let userId = store.session()?.userID {
                 store.logOutUserID(userId)
-                call.success();
+                call.resolve();
             }
         }
     }

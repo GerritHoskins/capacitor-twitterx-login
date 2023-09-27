@@ -6,18 +6,6 @@
     "tags": [],
     "methods": [
       {
-        "name": "isLogged",
-        "signature": "() => Promise<TwitterXLoggedResponse>",
-        "parameters": [],
-        "returns": "Promise<TwitterXLoggedResponse>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [
-          "TwitterXLoggedResponse"
-        ],
-        "slug": "islogged"
-      },
-      {
         "name": "login",
         "signature": "() => Promise<TwitterXLoginResponse>",
         "parameters": [],
@@ -43,29 +31,6 @@
     "properties": []
   },
   "interfaces": [
-    {
-      "name": "TwitterXLoggedResponse",
-      "slug": "twitterxloggedresponse",
-      "docs": "",
-      "tags": [],
-      "methods": [],
-      "properties": [
-        {
-          "name": "in",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "boolean"
-        },
-        {
-          "name": "out",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "boolean"
-        }
-      ]
-    },
     {
       "name": "TwitterXLoginResponse",
       "slug": "twitterxloginresponse",

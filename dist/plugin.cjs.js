@@ -9,15 +9,6 @@ const TwitterX = core.registerPlugin('TwitterX', {
 });
 
 class TwitterXWeb extends core.WebPlugin {
-    constructor() {
-        super({
-            name: 'Twitter',
-            platforms: ['web'],
-        });
-    }
-    isLogged() {
-        return Promise.reject('Not implemented on web.');
-    }
     login() {
         return Promise.reject('Not implemented on web.');
     }

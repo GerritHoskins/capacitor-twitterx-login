@@ -1,6 +1,6 @@
 {
   "name": "@gerrithoskins/capacitor-twitterx-login",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Capacitor plugin for Twitter/x",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -34,9 +34,8 @@
   },
   "devDependencies": {
     "@capacitor/android": "^5.0.0",
-    "@capacitor/cli": "^5.0.0",
     "@capacitor/core": "^5.0.0",
-    "@capacitor/docgen": "0.0.18",
+    "@capacitor/docgen": "0.2.0",
     "@capacitor/ios": "^5.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
@@ -50,15 +49,17 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/cli": "^4.0.0",
-    "@capacitor/core": "^4.0.0"
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
   },
   "keywords": [
     "capacitor",
     "plugin",
     "native",
+    "X",
+    "X ios",
+    "X android",
     "twitter",
-    "twitter kit",
     "twitter ios",
     "twitter android"
   ],

@@ -1,3 +1,5 @@
+package com.getcapacitor.community.twitterx;
+
 import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationResponse;
 import net.openid.appauth.AuthorizationService;

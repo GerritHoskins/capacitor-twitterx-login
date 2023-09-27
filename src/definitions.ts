@@ -2,7 +2,7 @@
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
-    Twitter: TwitterXPluginOptions;
+    TwitterX: TwitterXPluginOptions;
   }
 }
 

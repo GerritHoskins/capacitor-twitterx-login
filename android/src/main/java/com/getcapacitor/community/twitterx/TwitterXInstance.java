@@ -1,4 +1,4 @@
-package com.getcapacitor.community.twitter;
+package com.getcapacitor.community.twitterx;
 
 import android.app.Activity;
 import android.app.Application;
