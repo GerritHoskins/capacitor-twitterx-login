@@ -78,35 +78,38 @@ public class TwitterXPlugin extends Plugin {
 
     @ActivityCallback
     private void handleOauthIntentResult(PluginCall call, ActivityResult result) {
-        if (requestCode == AUTH_REQUEST_CODE) {
-           AuthorizationResponse response = AuthorizationResponse.fromIntent(data);
-           AuthorizationException error = AuthorizationException.fromIntent(data);
+        if (result.getResultCode() == AUTH_REQUEST_CODE) {
+        Intent data = result.getData();
+        if (data != null) {
+            AuthorizationResponse response = AuthorizationResponse.fromIntent(data);
+            AuthorizationException error = AuthorizationException.fromIntent(data);
 
-           if (response != null) {
-               // Authorization successful, exchange authorization code for access token
-               authService.performTokenRequest(
-                   response.createTokenExchangeRequest(),
-                   new AuthorizationService.TokenResponseCallback() {
-                       @Override
-                       public void onTokenRequestCompleted(
-                           TokenResponse tokenResponse, AuthorizationException exception) {
+            if (response != null) {
+                authService.performTokenRequest(
+                    response.createTokenExchangeRequest(),
+                    new AuthorizationService.TokenResponseCallback() {
+                        @Override
+                        public void onTokenRequestCompleted(
+                            TokenResponse tokenResponse, AuthorizationException exception) {
 
-                           if (tokenResponse != null) {
-                               String accessToken = tokenResponse.accessToken;
-                               JSObject ret = new JSObject();
-                               ret.put("accessToken", accessToken);
-                               ret.put("userName", "");
-                               ret.put("userId", "");
-                               call.resolve();
-                           } else {
-                              call.reject(LOG_TAG + "Unexpected exception on handling intent result.")
-                           
-                       }
-                   }
-               );
-           } else {
-               call.reject(LOG_TAG + "Authorization failed.")
-           }
-       }
+                            if (tokenResponse != null) {
+                                String accessToken = tokenResponse.accessToken;
+                                JSObject ret = new JSObject();
+                                ret.put("accessToken", accessToken);
+                                ret.put("userName", ""); 
+                                ret.put("userId", ""); 
+                                call.resolve(ret); 
+                            } else {
+                                call.reject(LOG_TAG + " Unexpected exception on handling intent result.");
+                            }
+                        }
+                    }
+                );
+            } else {
+                call.reject(LOG_TAG + " Authorization failed.");
+            }
+        } else {
+            call.reject(LOG_TAG + " Data is null.");
+        }
     }
 }
