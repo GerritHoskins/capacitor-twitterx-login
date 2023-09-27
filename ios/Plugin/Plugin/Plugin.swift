@@ -9,45 +9,41 @@ public class TwitterXPlugin: CAPPlugin
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var authState: OIDAuthState?
 
-    @objc func login(_ call: CAPPluginCall) {
-        DispatchQueue.main.async {
-             guard let configuration = OIDServiceConfiguration(
-            authorizationEndpoint: URL(string: "https://api.twitter.com/oauth/authorize")!,
-            tokenEndpoint: URL(string: "https://api.twitter.com/oauth/token")!
-        ) else {
-            // Handle error.            
+   @objc func login(_ call: CAPPluginCall) {
+    DispatchQueue.main.async {
+        guard let authorizationEndpoint = URL(string: "https://api.twitter.com/oauth/authorize"),
+              let tokenEndpoint = URL(string: "https://api.twitter.com/oauth/token") else {
+            call.reject("Invalid endpoint URL")
             return
         }
         
-        guard let clientId = getConfigValue("clientId") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON",
-              let redirectUri = getConfigValue("redirectUri") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON",
-              let scope = getConfigValue("scope") as? String ?? "ADD_IN_CAPACITOR_CONFIG_JSON",
-        else {
-            // Handle missing configuration values error
+        let configuration = OIDServiceConfiguration(authorizationEndpoint: authorizationEndpoint, tokenEndpoint: tokenEndpoint)
+        
+        guard let clientId = self.getConfigValue("clientId") as? String,
+              let redirectUriString = self.getConfigValue("redirectUri") as? String,
+              let redirectUri = URL(string: redirectUriString),
+              let scope = self.getConfigValue("scope") as? String else {
+            call.reject("Missing configuration values")
             return
         }
         
-        let request = OIDAuthorizationRequest(
-            configuration: configuration,
-            clientId: clientId,
-            clientSecret: nil,
-            scopes: [scope],
-            redirectURL: redirectUri,
-            responseType: OIDResponseTypeCode,
-            additionalParameters: nil
-        )
+        let request = OIDAuthorizationRequest(configuration: configuration, clientId: clientId, clientSecret: nil, scopes: [scope], redirectURL: redirectUri, responseType: OIDResponseTypeCode, additionalParameters: nil)
         
-        currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self) { authState, error in
+        self.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self.bridge?.viewController ?? self) { authState, error in
             if let authState = authState {
-                // Authorization successful, get the token
                 let accessToken = authState.lastTokenResponse?.accessToken
-                // Handle the access token and other required information
+                var result = JSObject()
+                result["accessToken"] = accessToken
+                result["userName"] = ""
+                result["userId"] = ""
+                call.resolve(result)
             } else {
                 // Authorization failed, handle the error
+                call.reject("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
             }
         }
-       }
     }
+}
     
     @objc func logout(_ call: CAPPluginCall) {
         DispatchQueue.main.async {

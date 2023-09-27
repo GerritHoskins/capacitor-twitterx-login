@@ -92,10 +92,11 @@ public class TwitterXPlugin extends Plugin {
                            TokenResponse tokenResponse, AuthorizationException exception) {
 
                            if (tokenResponse != null) {
-                               // Access token retrieved successfully
                                String accessToken = tokenResponse.accessToken;
                                JSObject ret = new JSObject();
-                               ret.put("authToken", accessToken);
+                               ret.put("accessToken", accessToken);
+                               ret.put("userName", "");
+                               ret.put("userId", "");
                                call.resolve();
                            } else {
                               call.reject(LOG_TAG + "Unexpected exception on handling intent result.")

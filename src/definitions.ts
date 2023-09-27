@@ -12,10 +12,9 @@ export interface TwitterXPlugin {
 }
 
 export interface TwitterXLoginResponse {
-  authToken: string;
-  authTokenSecret: string;
+  accessToken: string;
   userName: string;
-  userID: string;
+  userId: string;
 }
 
 export interface TwitterXPluginOptions {
