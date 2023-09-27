@@ -1,11 +1,11 @@
 var capacitorPlugin = (function (exports, core) {
     'use strict';
 
-    const Twitter = core.registerPlugin('Twitter', {
-        web: () => Promise.resolve().then(function () { return web; }).then((m) => new m.TwitterWeb()),
+    const TwitterX = core.registerPlugin('TwitterX', {
+        web: () => Promise.resolve().then(function () { return web; }).then((m) => new m.TwitterXWeb()),
     });
 
-    class TwitterWeb extends core.WebPlugin {
+    class TwitterXWeb extends core.WebPlugin {
         constructor() {
             super({
                 name: 'Twitter',
@@ -13,22 +13,22 @@ var capacitorPlugin = (function (exports, core) {
             });
         }
         isLogged() {
-            throw this.unimplemented('Not implemented on web.');
+            return Promise.reject('Not implemented on web.');
         }
         login() {
-            throw this.unimplemented('Not implemented on web.');
+            return Promise.reject('Not implemented on web.');
         }
         logout() {
-            throw this.unimplemented('Not implemented on web.');
+            return Promise.reject('Not implemented on web.');
         }
     }
 
     var web = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        TwitterWeb: TwitterWeb
+        TwitterXWeb: TwitterXWeb
     });
 
-    exports.Twitter = Twitter;
+    exports.TwitterX = TwitterX;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

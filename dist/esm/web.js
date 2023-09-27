@@ -1,5 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
-export class TwitterWeb extends WebPlugin {
+export class TwitterXWeb extends WebPlugin {
     constructor() {
         super({
             name: 'Twitter',
@@ -7,13 +7,13 @@ export class TwitterWeb extends WebPlugin {
         });
     }
     isLogged() {
-        throw this.unimplemented('Not implemented on web.');
+        return Promise.reject('Not implemented on web.');
     }
     login() {
-        throw this.unimplemented('Not implemented on web.');
+        return Promise.reject('Not implemented on web.');
     }
     logout() {
-        throw this.unimplemented('Not implemented on web.');
+        return Promise.reject('Not implemented on web.');
     }
 }
 //# sourceMappingURL=web.js.map

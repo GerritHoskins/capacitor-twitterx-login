@@ -1,8 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
-import { TwitterPlugin, TwitterLoginResponse, TwitterLoggedResponse } from './definitions';
-export declare class TwitterWeb extends WebPlugin implements TwitterPlugin {
+import { TwitterXPlugin, TwitterXLoginResponse, TwitterXLoggedResponse } from './definitions';
+export declare class TwitterXWeb extends WebPlugin implements TwitterXPlugin {
     constructor();
-    isLogged(): Promise<TwitterLoggedResponse>;
-    login(): Promise<TwitterLoginResponse>;
+    isLogged(): Promise<TwitterXLoggedResponse>;
+    login(): Promise<TwitterXLoginResponse>;
     logout(): Promise<void>;
 }

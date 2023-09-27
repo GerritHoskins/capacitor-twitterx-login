@@ -7,7 +7,7 @@ export default {
       name: 'capacitorPlugin',
       globals: {
         '@capacitor/core': 'capacitorExports',
-		'@capacitor/cli': 'capacitorExports',
+		    '@capacitor/cli': 'capacitorExports',
       },
       sourcemap: true,
       inlineDynamicImports: true,

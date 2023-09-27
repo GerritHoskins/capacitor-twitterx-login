@@ -3,7 +3,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 Pod::Spec.new do |s|
-	s.name = 'CapacitorTwitterxLogin'
+	s.name = 'CapacitorTwitterXLogin'
 	s.version = '0.0.1'
 	s.summary = 'authenticate with twitterx'
 	s.license = 'MIT'
