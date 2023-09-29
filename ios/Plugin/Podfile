@@ -1,19 +1,18 @@
-# Uncomment the next line to define a global platform for your project
 platform :ios, '13.0'
 
-target 'Plugin' do
+def capacitor_pods
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
+  pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../node_modules/@capacitor/ios'
+end
 
-  # Pods
-  pod 'TwitterKit'
+target 'Plugin' do
+  capacitor_pods
   pod 'AppAuth'
-  pod 'Capacitor'
 end
 
 target 'PluginTests' do
-  use_frameworks!
-  pod 'TwitterKit'
+  capacitor_pods
   pod 'AppAuth'
-  pod 'Capacitor'
 end

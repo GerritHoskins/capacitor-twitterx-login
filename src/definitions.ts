@@ -2,29 +2,23 @@
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
-    Twitter: TwitterXPluginOptions;
+    TwitterX: TwitterXPluginOptions;
   }
 }
 
 export interface TwitterXPlugin {
-  isLogged(): Promise<TwitterXLoggedResponse>;
   login(): Promise<TwitterXLoginResponse>;
   logout(): Promise<void>;
 }
 
 export interface TwitterXLoginResponse {
-  authToken: string;
-  authTokenSecret: string;
+  accessToken: string;
   userName: string;
-  userID: string;
-}
-
-export interface TwitterXLoggedResponse {
-  in: boolean;
-  out: boolean
+  userId: string;
 }
 
 export interface TwitterXPluginOptions {
-  consumerKey?: string;
-  consumerSecret?: string;
+  clientId?: string;
+  redirectUri?: string;
+  scope?: string | string[];
 }

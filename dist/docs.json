@@ -1,31 +1,19 @@
 {
   "api": {
-    "name": "TwitterPlugin",
-    "slug": "twitterplugin",
+    "name": "TwitterXPlugin",
+    "slug": "twitterxplugin",
     "docs": "",
     "tags": [],
     "methods": [
       {
-        "name": "isLogged",
-        "signature": "() => Promise<TwitterLoggedResponse>",
-        "parameters": [],
-        "returns": "Promise<TwitterLoggedResponse>",
-        "tags": [],
-        "docs": "",
-        "complexTypes": [
-          "TwitterLoggedResponse"
-        ],
-        "slug": "islogged"
-      },
-      {
         "name": "login",
-        "signature": "() => Promise<TwitterLoginResponse>",
+        "signature": "() => Promise<TwitterXLoginResponse>",
         "parameters": [],
-        "returns": "Promise<TwitterLoginResponse>",
+        "returns": "Promise<TwitterXLoginResponse>",
         "tags": [],
         "docs": "",
         "complexTypes": [
-          "TwitterLoginResponse"
+          "TwitterXLoginResponse"
         ],
         "slug": "login"
       },
@@ -44,31 +32,8 @@
   },
   "interfaces": [
     {
-      "name": "TwitterLoggedResponse",
-      "slug": "twitterloggedresponse",
-      "docs": "",
-      "tags": [],
-      "methods": [],
-      "properties": [
-        {
-          "name": "in",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "boolean"
-        },
-        {
-          "name": "out",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "boolean"
-        }
-      ]
-    },
-    {
-      "name": "TwitterLoginResponse",
-      "slug": "twitterloginresponse",
+      "name": "TwitterXLoginResponse",
+      "slug": "twitterxloginresponse",
       "docs": "",
       "tags": [],
       "methods": [],

@@ -1,6 +1,6 @@
 {
   "name": "@gerrithoskins/capacitor-twitterx-login",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Capacitor plugin for Twitter/x",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,11 +11,11 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorTwitterxLogin.podspec"
+    "CapacitorTwitterXLogin.podspec"
   ],
   "author": "GerritHoskins",
   "license": "MIT",
-  "scripts": {
+   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
@@ -30,14 +30,13 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build",
-    "publish:cocoapod": "pod trunk push ./CapacitorTwitterxLogin.podspec --allow-warnings"
+    "publish:cocoapod": "pod trunk push ./CapacitorTwitterXLogin.podspec --allow-warnings"
   },
   "devDependencies": {
-    "@capacitor/android": "^4.0.0",
-    "@capacitor/core": "^4.0.0",
-    "@capacitor/cli": "^4.0.0",
-    "@capacitor/docgen": "0.0.18",
-    "@capacitor/ios": "^4.0.0",
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/docgen": "0.2.0",
+    "@capacitor/ios": "^5.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "~1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
@@ -50,21 +49,23 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^4.0.0",
-    "@capacitor/cli": "^4.0.0"
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
   },
   "keywords": [
     "capacitor",
     "plugin",
     "native",
+    "X",
+    "X ios",
+    "X android",
     "twitter",
-    "twitter kit",
     "twitter ios",
     "twitter android"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GerritHoskins/capacitor-twitterx-login.git"
+    "url": "https://github.com/GerritHoskins/capacitor-twitterx-login.git"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",

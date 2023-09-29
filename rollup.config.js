@@ -4,10 +4,9 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorPlugin',
+      name: 'capacitorActionSheet',
       globals: {
         '@capacitor/core': 'capacitorExports',
-		'@capacitor/cli': 'capacitorExports',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -19,5 +18,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core', '@capacitor/cli'],
+  external: ['@capacitor/core'],
 };
