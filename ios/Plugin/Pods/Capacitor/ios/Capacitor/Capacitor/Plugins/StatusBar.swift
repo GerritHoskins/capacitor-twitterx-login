@@ -6,20 +6,19 @@ import Foundation
  */
 @objc(StatusBar)
 public class StatusBar: CAPPlugin {
-  @objc public func setStyle(_ call: CAPPluginCall) {
-    let options = call.options!
+    @objc public func setStyle(_ call: CAPPluginCall) {
+        let options = call.options!
 
-    if let style = options["style"] as? String {
-      DispatchQueue.main.async {
-        if style == "DARK" {
-          UIApplication.shared.statusBarStyle = .lightContent
-        } else if style == "LIGHT" {
-          UIApplication.shared.statusBarStyle = .default
+        if let style = options["style"] as? String {
+            DispatchQueue.main.async {
+                if style == "DARK" {
+                    UIApplication.shared.statusBarStyle = .lightContent
+                } else if style == "LIGHT" {
+                    UIApplication.shared.statusBarStyle = .default
+                }
+            }
         }
-      }
-    }
-    
-    call.success([:])
-  }
-}
 
+        call.success([:])
+    }
+}
