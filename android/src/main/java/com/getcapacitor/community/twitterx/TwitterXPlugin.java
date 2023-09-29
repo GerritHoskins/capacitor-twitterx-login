@@ -46,7 +46,7 @@ public class TwitterXPlugin extends Plugin {
                     authService = new AuthorizationService(getContext());
 
                     if (authState.getNeedsTokenRefresh() && !refreshToken.isEmpty()) {
-                        performTokenRequest();
+                        performTokenRequest(call);
                     } else {
                         AuthorizationRequest request = new AuthorizationRequest.Builder(
                             config,
@@ -57,7 +57,6 @@ public class TwitterXPlugin extends Plugin {
                             .setScope(getConfig().getString("scope"))
                             .build();
 
-                        //authService = new AuthorizationService(getContext());
                         Intent authIntent = authService.getAuthorizationRequestIntent(request);
                         startActivityForResult(call, authIntent, "handleOauthIntentResult");
                     }
@@ -69,7 +68,7 @@ public class TwitterXPlugin extends Plugin {
         );
     }
 
-    public void performTokenRequest() {
+    public void performTokenRequest(PluginCall call) {
         String clientId = getConfig().getString("clientId");
 
         TokenRequest tokenRequest = new TokenRequest.Builder(config, clientId)
@@ -82,9 +81,12 @@ public class TwitterXPlugin extends Plugin {
             (tokenResponse, exception) -> {
                 if (exception != null) {
                     Log.e(LOG_TAG + "AppAuth", "Token Request failed", exception);
+                    call.reject(LOG_TAG + "AppAuth", "Token Request failed");
                 } else if (tokenResponse != null) {
                     authState.update(tokenResponse, null);
-                    accessToken = tokenResponse.accessToken;
+                    JSObject ret = new JSObject();
+                    ret.put("accessToken", tokenResponse.accessToken);
+                    call.resolve(ret);
                 }
             }
         );
