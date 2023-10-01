@@ -1,7 +1,7 @@
 {
   "api": {
-    "name": "TwitterXPlugin",
-    "slug": "twitterxplugin",
+    "name": "TwitterXLoginPlugin",
+    "slug": "twitterxloginplugin",
     "docs": "",
     "tags": [],
     "methods": [
@@ -39,14 +39,7 @@
       "methods": [],
       "properties": [
         {
-          "name": "authToken",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "string"
-        },
-        {
-          "name": "authTokenSecret",
+          "name": "accessToken",
           "tags": [],
           "docs": "",
           "complexTypes": [],
@@ -57,14 +50,14 @@
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "string"
+          "type": "string | undefined"
         },
         {
-          "name": "userID",
+          "name": "userId",
           "tags": [],
           "docs": "",
           "complexTypes": [],
-          "type": "string"
+          "type": "string | undefined"
         }
       ]
     }

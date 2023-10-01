@@ -1,13 +1,16 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { TwitterXPlugin, TwitterXLoginResponse } from './definitions';
+import type { TwitterXLoginPlugin, TwitterXLoginResponse } from './definitions';
 
-export class TwitterXWeb extends WebPlugin implements TwitterXPlugin {
-  login(): Promise<TwitterXLoginResponse> {
-    return Promise.reject('Not implemented on web.');
+export class TwitterXLoginWeb extends WebPlugin implements TwitterXLoginPlugin {
+  async login(): Promise<TwitterXLoginResponse> {
+    this.unimplemented('Not implemented on web.');
+    return {
+      accessToken: '',
+    };
   }
 
-  logout(): Promise<void> {
-    return Promise.reject('Not implemented on web.');
+  async logout(): Promise<void> {
+    this.unimplemented('Not implemented on web.');
   }
 }

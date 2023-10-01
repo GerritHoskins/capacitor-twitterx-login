@@ -5,14 +5,14 @@ def capacitor_pods
   use_frameworks!
   pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../node_modules/@capacitor/ios'
-end
-
-target 'Plugin' do
-  capacitor_pods
   pod 'AppAuth'
 end
 
 target 'PluginTests' do
-  capacitor_pods
-  pod 'AppAuth'
+  use_frameworks!
+  pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
+end
+
+post_install do |installer|
+  assertDeploymentTarget(installer)
 end

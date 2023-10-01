@@ -1,4 +1,4 @@
-package com.getcapacitor.community.twitterx;
+package dev.pixeltronic.plugin.twitterxlogin;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -22,10 +22,10 @@ import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.TokenRequest;
 
-@CapacitorPlugin(name = "TwitterX")
-public class TwitterXPlugin extends Plugin {
+@CapacitorPlugin(name = "TwitterXLogin")
+public class TwitterXLoginPlugin extends Plugin {
 
-    public static final String LOG_TAG = "twitterX ";
+    public static final String LOG_TAG = "TwitterXLoginPlugin ";
     private static final String AUTHORIZATION_ENDPOINT = "https://twitter.com/i/oauth2/authorize";
     private static final String TOKEN_ENDPOINT = "https://api.twitter.com/2/oauth2/token";
     private AuthState authState;
@@ -41,7 +41,6 @@ public class TwitterXPlugin extends Plugin {
             () -> {
                 try {
                     config = new AuthorizationServiceConfiguration(Uri.parse(AUTHORIZATION_ENDPOINT), Uri.parse(TOKEN_ENDPOINT));
-
                     authState = new AuthState(config);
                     authService = new AuthorizationService(getContext());
 
@@ -56,7 +55,6 @@ public class TwitterXPlugin extends Plugin {
                         )
                             .setScope(getConfig().getString("scope"))
                             .build();
-
                         Intent authIntent = authService.getAuthorizationRequestIntent(request);
                         startActivityForResult(call, authIntent, "handleOauthIntentResult");
                     }
@@ -105,9 +103,7 @@ public class TwitterXPlugin extends Plugin {
         }
 
         String logoutUrl = issuer + "/v1/logout?id_token_hint=" + idToken;
-
         authState = null;
-
         // TODO: clear sensitive information in SharedPreferences
 
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoutUrl));

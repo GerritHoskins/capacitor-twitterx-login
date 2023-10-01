@@ -1,6 +1,6 @@
 # @gerrithoskins/capacitor-twitterx-login
 
-Allows quick and easy authentication with Twitter/X
+capacitor plugin for easy authentication with Twitter/X using oauth2
 
 ## Install
 

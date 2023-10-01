@@ -1,4 +1,4 @@
-import { TwitterXPlugin } from './definitions';
-declare const TwitterX: TwitterXPlugin;
+import type { TwitterXLoginPlugin } from './definitions';
+declare const TwitterXLogin: TwitterXLoginPlugin;
 export * from './definitions';
-export { TwitterX };
+export { TwitterXLogin };

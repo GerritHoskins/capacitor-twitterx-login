@@ -1,10 +1,10 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { TwitterXPlugin } from './definitions';
+import type { TwitterXLoginPlugin } from './definitions';
 
-const TwitterX = registerPlugin<TwitterXPlugin>('TwitterX', {
-  web: () => import('./web').then(m => new m.TwitterXWeb()),
+const TwitterXLogin = registerPlugin<TwitterXLoginPlugin>('TwitterXLogin', {
+  web: () => import('./web').then(m => new m.TwitterXLoginWeb()),
 });
 
 export * from './definitions';
-export { TwitterX };
+export { TwitterXLogin };

@@ -1,33 +1,32 @@
-var capacitorPlugin = (function (exports, core) {
-  'use strict';
+var capacitorTwitterXLogin = (function (exports, core) {
+    'use strict';
 
-  const TwitterX = core.registerPlugin('TwitterX', {
-    web: () =>
-      Promise.resolve()
-        .then(function () {
-          return web;
-        })
-        .then(m => new m.TwitterXWeb()),
-  });
+    const TwitterXLogin = core.registerPlugin('TwitterXLogin', {
+        web: () => Promise.resolve().then(function () { return web; }).then(m => new m.TwitterXLoginWeb()),
+    });
 
-  class TwitterXWeb extends core.WebPlugin {
-    login() {
-      return Promise.reject('Not implemented on web.');
+    class TwitterXLoginWeb extends core.WebPlugin {
+        async login() {
+            this.unimplemented('Not implemented on web.');
+            return {
+                accessToken: '',
+            };
+        }
+        async logout() {
+            this.unimplemented('Not implemented on web.');
+        }
     }
-    logout() {
-      return Promise.reject('Not implemented on web.');
-    }
-  }
 
-  var web = /*#__PURE__*/ Object.freeze({
-    __proto__: null,
-    TwitterXWeb: TwitterXWeb,
-  });
+    var web = /*#__PURE__*/Object.freeze({
+        __proto__: null,
+        TwitterXLoginWeb: TwitterXLoginWeb
+    });
 
-  exports.TwitterX = TwitterX;
+    exports.TwitterXLogin = TwitterXLogin;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
+    Object.defineProperty(exports, '__esModule', { value: true });
 
-  return exports;
+    return exports;
+
 })({}, capacitorExports);
 //# sourceMappingURL=plugin.js.map

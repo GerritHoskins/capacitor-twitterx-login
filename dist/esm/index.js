@@ -1,7 +1,7 @@
 import { registerPlugin } from '@capacitor/core';
-const TwitterX = registerPlugin('TwitterX', {
-  web: () => import('./web').then(m => new m.TwitterXWeb()),
+const TwitterXLogin = registerPlugin('TwitterXLogin', {
+    web: () => import('./web').then(m => new m.TwitterXLoginWeb()),
 });
 export * from './definitions';
-export { TwitterX };
+export { TwitterXLogin };
 //# sourceMappingURL=index.js.map
