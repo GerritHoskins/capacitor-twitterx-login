@@ -1,4 +1,5 @@
-/// <reference types="@capacitor/cli" />
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
@@ -13,8 +14,8 @@ export interface TwitterXLoginPlugin {
 
 export interface TwitterXLoginResponse {
   accessToken: string;
-  userName?: string;
-  userId?: string;
+  userName: string;
+  userId: string;
 }
 
 export interface TwitterXConfig {

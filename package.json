@@ -1,6 +1,6 @@
 {
   "name": "@gerrithoskins/capacitor-twitterx-login",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "capacitor plugin for easy authentication with Twitter/X using oauth2",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
