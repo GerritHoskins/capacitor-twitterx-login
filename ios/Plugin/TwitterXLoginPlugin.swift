@@ -2,64 +2,53 @@ import Foundation
 import Capacitor
 import AppAuth
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(TwitterXLoginPlugin)
 public class TwitterXLoginPlugin: CAPPlugin {
-    let LOG_TAG = "TwitterXLoginPlugin "
-    let AUTHORIZATION_ENDPOINT = "https://twitter.com/i/oauth2/authorize"
-    let TOKEN_ENDPOINT = "https://api.twitter.com/2/oauth2/token"
-    var authState: OIDAuthState? = nil
-    var authService: OIDAuthorizationService? = nil
-    var config: OIDServiceConfiguration? = nil
+    let logTag = "TwitterXLoginPlugin"
+    let authorizationEndpoint = URL(string: "https://twitter.com/i/oauth2/authorize")
+    let tokenEndpoint = URL(string: "https://api.twitter.com/2/oauth2/token")
+    var config: OIDServiceConfiguration?
+    var authState: OIDAuthState?
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
-    var request: OIDAuthorizationRequest?
-    var accessToken: String? = nil
-    var refreshToken: String? = nil
 
     @objc func login(_ call: CAPPluginCall) {
-        guard let clientId = getConfig().getString("clientId") else { return }
-        guard let redirectUri = getConfig().getString("redirectUri") else { return }
-        let scopes: [String]? = getConfig().getString("scope") != nil ? [getConfig().getString("scope")!] : nil
-
-        self.config = OIDServiceConfiguration(
-            authorizationEndpoint: URL(string: "https://api.twitter.com/oauth/authorize")!,
-            tokenEndpoint: URL(string: "https://api.twitter.com/oauth/access_token")!
-        )
-        if(self.config != nil) {
-            request = OIDAuthorizationRequest(
-                configuration: self.config!,
-                clientId: clientId,
-                clientSecret: nil,
-                scopes: scopes,
-                redirectURL: URL(string: redirectUri)!,
-                responseType: OIDResponseTypeCode,
-                additionalParameters: nil
-            )
+        guard let clientId = getConfig().getString("clientId"),
+              let redirectUri = getConfig().getString("redirectUri"),
+              let authorizationEndpoint = authorizationEndpoint,
+              let tokenEndpoint = tokenEndpoint else {
+            call.reject("Configuration Error")
+            return
         }
 
-        if (self.authState != nil && self.refreshToken != nil) {
-            guard let response = self.authState?.lastTokenResponse as? OIDAuthorizationResponse else {
-                return
-            }
-            self.performTokenRequest(call, authorizationResponse: response);
-        } else {
-            currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request!, presenting: (self.bridge?.viewController)!) { authState, error in
+        let scopes: [String] = (getConfig().getArray("scope", [""]))?.compactMap { $0 as? String } ?? [""]
+        let config = OIDServiceConfiguration(authorizationEndpoint: authorizationEndpoint, tokenEndpoint: tokenEndpoint)
 
+        let request = OIDAuthorizationRequest(
+            configuration: config,
+            clientId: clientId,
+            clientSecret: nil,
+            scopes: scopes,
+            redirectURL: URL(string: redirectUri)!,
+            responseType: OIDResponseTypeCode,
+            additionalParameters: nil
+        )
+
+        if let authState = authState, authState.lastTokenResponse != nil {
+            let response = authState.lastAuthorizationResponse
+            performTokenRequest(call, authorizationResponse: response)
+        } else {
+            currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: self.bridge?.viewController ?? UIViewController()) { authState, error in
                 if let authState = authState {
                     let authToken = authState.lastTokenResponse?.accessToken
-                    self.refreshToken = authState.lastTokenResponse?.refreshToken
+                    self.authState = authState
                     call.resolve([
                         "accessToken": authToken ?? "",
-                        "userName": authToken ?? "",
-                        "userId": authToken ?? ""
+                        "userName": "",
+                        "userId": ""
                     ])
                 } else {
                     call.reject("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
                 }
-
             }
         }
     }
@@ -93,24 +82,20 @@ public class TwitterXLoginPlugin: CAPPlugin {
     }
 
     @objc func logout(_ call: CAPPluginCall) {
-        let idToken = self.authState?.lastTokenResponse
-        let issuer = self.config?.discoveryDocument?.issuer
-
-        guard  (idToken != nil), (issuer != nil) else {
-            call.reject("(self.LOG_TAG)Error forming logout URL or no idToken available")
+        guard let idToken = self.authState?.lastTokenResponse,
+              let issuer = self.config?.discoveryDocument?.issuer else {
+            call.reject("\(logTag) Error forming logout URL or no idToken available")
             return
         }
 
-        let logoutUrl = "(issuer)/v1/logout?id_token_hint=(idToken)"
+        let logoutUrl = "\(issuer)/v1/logout?id_token_hint=\(idToken)"
 
-        self.authState = nil
-
+        authState = nil
         // TODO: clear sensitive information in UserDefaults
 
         if let url = URL(string: logoutUrl) {
             UIApplication.shared.open(url)
         }
-
         call.resolve()
     }
 }

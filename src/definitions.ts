@@ -1,9 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+/// <reference types="@capacitor/cli" />
 
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
-    TwitterXLoginPlugin: TwitterXConfig;
+    TwitterXLogin: TwitterXConfig;
   }
 }
 
